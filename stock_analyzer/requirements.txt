@@ -1,0 +1,17 @@
+requests
+beautifulsoup4
+lxml
+pandas
+numpy
+yfinance
+sqlalchemy
+psycopg2-binary
+matplotlib
+plotly
+ta
+textblob
+snownlp
+selenium
+python-dotenv
+playwright
+streamlit
