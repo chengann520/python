@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雲林縣 | 台灣地方創生平臺</title>
+    <link rel="stylesheet" href="styles.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Outfit:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        .county-hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1571474004502-c18476e81b79?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            /* Placeholder Yunlin-like Image */
+            background-size: cover;
+            background-position: center;
+            height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .district-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+            padding: 40px 0;
+        }
+
+        .district-btn {
+            background-color: var(--white);
+            border: 1px solid #ddd;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            transition: var(--transition);
+            font-weight: 500;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: block;
+        }
+
+        .district-btn:hover {
+            background-color: var(--accent-color);
+            color: var(--white);
+            border-color: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .district-btn.active {
+            background-color: var(--accent-color);
+            color: var(--white);
+            border-color: var(--accent-color);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container">
+            <h1 class="logo"><a href="index.html">台灣地方創生平臺</a></h1>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html#about">關於平臺</a></li>
+                    <li><a href="index.html#map-section">探索地圖</a></li>
+                    <li><a href="index.html#featured">精選案例</a></li>
+                    <li><a href="index.html#contact">聯絡我們</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="county-hero">
+            <div class="hero-content">
+                <h2>雲林縣</h2>
+                <p>農業首都的轉型與新生</p>
+            </div>
+        </section>
+
+        <section class="container" style="padding: 60px 20px;">
+            <h2 class="section-title">選擇行政區</h2>
+            <p class="section-subtitle" style="text-align: center;">點擊行政區查看詳細介紹與創生案例</p>
+
+            <div class="district-grid">
+                <a href="township.html?county=yunlin&district=斗六市" class="district-btn">斗六市</a>
+                <a href="township.html?county=yunlin&district=斗南鎮" class="district-btn">斗南鎮</a>
+                <a href="township.html?county=yunlin&district=虎尾鎮" class="district-btn">虎尾鎮</a>
+                <a href="township.html?county=yunlin&district=西螺鎮" class="district-btn">西螺鎮</a>
+                <a href="township.html?county=yunlin&district=土庫鎮" class="district-btn">土庫鎮</a>
+                <a href="township.html?county=yunlin&district=北港鎮" class="district-btn">北港鎮</a>
+                <a href="township.html?county=yunlin&district=古坑鄉" class="district-btn">古坑鄉</a>
+                <a href="township.html?county=yunlin&district=大埤鄉" class="district-btn">大埤鄉</a>
+                <a href="township.html?county=yunlin&district=莿桐鄉" class="district-btn">莿桐鄉</a>
+                <a href="township.html?county=yunlin&district=林內鄉" class="district-btn">林內鄉</a>
+                <a href="township.html?county=yunlin&district=二崙鄉" class="district-btn">二崙鄉</a>
+                <a href="township.html?county=yunlin&district=崙背鄉" class="district-btn">崙背鄉</a>
+                <a href="township.html?county=yunlin&district=麥寮鄉" class="district-btn">麥寮鄉</a>
+                <a href="township.html?county=yunlin&district=東勢鄉" class="district-btn">東勢鄉</a>
+                <a href="township.html?county=yunlin&district=褒忠鄉" class="district-btn">褒忠鄉</a>
+                <a href="township.html?county=yunlin&district=臺西鄉" class="district-btn">臺西鄉</a>
+                <a href="township.html?county=yunlin&district=元長鄉" class="district-btn">元長鄉</a>
+                <a href="township.html?county=yunlin&district=四湖鄉" class="district-btn">四湖鄉</a>
+                <a href="township.html?county=yunlin&district=口湖鄉" class="district-btn">口湖鄉</a>
+                <a href="township.html?county=yunlin&district=水林鄉" class="district-btn">水林鄉</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 台灣地方創生平臺. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+
+</html>

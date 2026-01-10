@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台灣地方創生平臺 | 探索在地故事</title>
+    <meta name="description" content="彙整台灣攝影作品、地方介紹、創生案例與觀察心得，打造社區與大眾交流的平臺。">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Outfit:wght@300;400;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container">
+            <h1 class="logo"><a href="index.html">台灣地方創生平臺</a></h1>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#about">關於平臺</a></li>
+                    <li><a href="#map-section">探索地圖</a></li>
+                    <li><a href="#featured">精選案例</a></li>
+                    <li><a href="#contact">聯絡我們</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h2>看見台灣的每一種面貌</h2>
+                <p>深入地方，發現不為人知的故事與感動</p>
+                <a href="#map-section" class="btn btn-primary">開始探索</a>
+            </div>
+        </section>
+
+        <section id="map-section" class="map-section">
+            <div class="container">
+                <h2 class="section-title">探索台灣地圖</h2>
+                <p class="section-subtitle">點擊縣市，發現更多在地故事</p>
+
+                <div id="county-grid" class="county-grid">
+                    <!-- Counties will be populated here by JS -->
+                </div>
+            </div>
+        </section>
+
+        <section id="featured" class="featured-section">
+            <div class="container">
+                <h2 class="section-title">精選創生案例</h2>
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-image"
+                            style="background-color: #ddd; display: flex; align-items: center; justify-content: center;">
+                            <span>土庫驛可可莊園</span>
+                        </div>
+                        <div class="card-content">
+                            <h3>雲林土庫｜土庫驛可可莊園</h3>
+                            <p>廢棄豬舍變身歐風莊園，用巧克力甜蜜復興小鎮。</p>
+                            <a href="tuku.html" class="btn btn-text">閱讀更多 &rarr;</a>
+                        </div>
+                    </div>
+                    <!-- More placeholders -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 台灣地方創生平臺. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const countyGrid = document.getElementById('county-grid');
+
+            // Order of counties to display
+            const countyOrder = [
+                'keelung', 'taipei', 'new-taipei', 'taoyuan', 'hsinchu-city', 'hsinchu-county', 'miaoli',
+                'taichung', 'changhua', 'nantou', 'yunlin', 'chiayi-city', 'chiayi-county', 'tainan', 'kaohsiung', 'pingtung',
+                'yilan', 'hualien', 'taitung',
+                'penghu', 'kinmen', 'matsu', 'green-island', 'lanyu'
+            ];
+
+            countyOrder.forEach(key => {
+                if (taiwanData[key]) {
+                    const county = taiwanData[key];
+                    const btn = document.createElement('a');
+                    btn.href = `county.html?id=${key}`;
+                    btn.className = 'county-btn';
+                    btn.textContent = county.name;
+                    countyGrid.appendChild(btn);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

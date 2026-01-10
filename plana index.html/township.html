@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鄉鎮介紹 | 台灣地方創生平臺</title>
+    <link rel="stylesheet" href="styles.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Outfit:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        .place-hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            /* Placeholder Field Image */
+            background-size: cover;
+            background-position: center;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .content-nav {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 900;
+        }
+
+        .content-nav ul {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 15px 0;
+        }
+
+        .content-nav a {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .content-nav a:hover,
+        .content-nav a.active {
+            color: var(--accent-color);
+        }
+
+        .content-section {
+            padding: 80px 0;
+        }
+
+        .content-section:nth-child(even) {
+            background-color: var(--white);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 10px;
+            font-size: 0.8rem;
+        }
+
+        .case-study {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            margin-bottom: 60px;
+        }
+
+        .case-study:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .case-image {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .case-image img {
+            width: 100%;
+            display: block;
+        }
+
+        .case-text {
+            flex: 1;
+        }
+
+        .case-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .tag {
+            display: inline-block;
+            background: #eee;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .case-study {
+                flex-direction: column;
+            }
+
+            .case-study:nth-child(even) {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container">
+            <h1 class="logo"><a href="index.html">台灣地方創生平臺</a></h1>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html#about">關於平臺</a></li>
+                    <li><a href="index.html#map-section">探索地圖</a></li>
+                    <li><a href="index.html#featured">精選案例</a></li>
+                    <li><a href="index.html#contact">聯絡我們</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="place-hero">
+            <div class="hero-content">
+                <h2 id="place-title">鄉鎮名稱</h2>
+                <p id="place-subtitle">探索在地的美好</p>
+            </div>
+        </section>
+
+        <nav class="content-nav">
+            <div class="container">
+                <ul>
+                    <li><a href="#intro">地方介紹</a></li>
+                    <li><a href="#cases">創生案例</a></li>
+                    <li><a href="#gallery">攝影集錦</a></li>
+                    <li><a href="#observation">觀察心得</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <section id="intro" class="content-section">
+            <div class="container">
+                <h2 class="section-title">地方介紹</h2>
+                <p class="section-subtitle">關於這裡的故事</p>
+                <div style="max-width: 800px; margin: 0 auto; line-height: 1.8;">
+                    <p id="intro-text-1">這裡擁有豐富的自然資源與深厚的人文底蘊。隨著時代變遷，我們正努力透過地方創生，為這片土地注入新的活力。</p>
+                    <br>
+                    <p id="intro-text-2">從傳統產業的轉型到青年返鄉的熱潮，每一個角落都在發生著動人的故事。歡迎您深入探索，感受這裡的獨特魅力。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="cases" class="content-section" style="background-color: #f4f4f4;">
+            <div class="container">
+                <h2 class="section-title">創生案例</h2>
+                <p class="section-subtitle">看見改變的力量</p>
+
+                <div class="case-study">
+                    <div class="case-image">
+                        <img src="https://images.unsplash.com/photo-1621961048738-a29740d20a83?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            alt="產業轉型示意圖">
+                        <p style="font-size: 12px; color: #888; text-align: center; padding: 5px;">
+                            圖片來源：Unsplash (示意圖)
+                        </p>
+                    </div>
+                    <div class="case-text">
+                        <span class="tag">產業轉型</span>
+                        <h3>在地產業升級</h3>
+                        <p>透過導入新技術與品牌化經營，將傳統農特產品轉型為高附加價值的商品。不僅保留了在地的風味，更創造了新的市場機會。</p>
+                        <br>
+                        <p><strong>創生亮點：</strong></p>
+                        <ul>
+                            <li>• 傳統工藝與現代設計結合</li>
+                            <li>• 建立在地品牌識別</li>
+                            <li>• 拓展多元銷售通路</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="case-study">
+                    <div class="case-image">
+                        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            alt="文化傳承示意圖">
+                        <p style="font-size: 12px; color: #888; text-align: center; padding: 5px;">
+                            圖片來源：Unsplash (示意圖)
+                        </p>
+                    </div>
+                    <div class="case-text">
+                        <span class="tag">文化傳承</span>
+                        <h3>社區文化再造</h3>
+                        <p>挖掘在地歷史記憶，透過導覽解說與體驗活動，讓更多人認識這片土地的故事。同時也凝聚了社區居民的向心力，共同守護家鄉文化。</p>
+                        <br>
+                        <p>這不僅是文化的保存，更是透過人與人的互動，讓地方的溫度得以傳遞，創造永續的文化價值。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery" class="content-section">
+            <div class="container">
+                <h2 class="section-title">攝影集錦</h2>
+                <p class="section-subtitle">鏡頭下的在地日常</p>
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1533481405265-e9ce0c044abb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                            alt="老街風情">
+                        <div class="gallery-caption">老街風情 / 攝影：Unsplash User</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                            alt="在地物產">
+                        <div class="gallery-caption">在地物產 / 攝影：Unsplash User</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1518182170546-0766bc6f9213?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                            alt="自然景觀">
+                        <div class="gallery-caption">自然景觀 / 攝影：Unsplash User</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1523527927236-da90427de6f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                            alt="人文生活">
+                        <div class="gallery-caption">人文生活 / 攝影：Unsplash User</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="observation" class="content-section" style="background-color: #f9f9f9;">
+            <div class="container">
+                <h2 class="section-title">觀察心得</h2>
+                <div id="observation-box"
+                    style="background: #fff; padding: 40px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <h3>看見地方的可能性</h3>
+                    <p style="margin-top: 20px; color: #555;">
+                        走訪這裡，最令人感動的是看見地方的活力正在復甦。透過在地居民與返鄉青年的共同努力，許多被遺忘的角落重新煥發光彩。
+                    </p>
+                    <p style="margin-top: 15px; color: #555;">
+                        地方創生不僅是產業的發展，更是對土地情感的連結。期待未來能有更多人來到這裡，親身感受這份改變的力量，並寫下屬於自己的故事。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div style="text-align: center; margin-top: 20px; margin-bottom: 80px;">
+            <a href="#" id="back-btn" class="btn btn-primary">返回縣市列表</a>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 台灣地方創生平臺. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const countyId = urlParams.get('county');
+            const districtName = urlParams.get('district');
+
+            if (countyId && districtName && taiwanData[countyId]) {
+                const countyData = taiwanData[countyId];
+                const countyName = countyData.name;
+
+                // Find the specific district object
+                const districtData = countyData.districts.find(d => d.name === districtName);
+
+                if (districtData) {
+                    const fullName = `${countyName}${districtName}`;
+                    document.getElementById('place-title').textContent = fullName;
+                    document.title = `${fullName} | 台灣地方創生平臺`;
+
+                    // Set Hero Image if available
+                    if (districtData.image) {
+                        document.querySelector('.place-hero').style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('${districtData.image}')`;
+                    }
+
+                    // Update Intro Section
+                    document.querySelector('.section-subtitle').textContent = `關於${districtName}的故事`;
+                    if (districtData.intro) {
+                        document.getElementById('intro-text-1').textContent = districtData.intro;
+                        document.getElementById('intro-text-2').style.display = 'none';
+                    } else {
+                        document.getElementById('intro-text-1').textContent = `${districtName}擁有豐富的自然資源與深厚的人文底蘊。隨著時代變遷，我們正努力透過地方創生，為這片土地注入新的活力。`;
+                        document.getElementById('intro-text-2').style.display = 'block';
+                    }
+
+                    // Update Cases Section
+                    const casesSection = document.getElementById('cases');
+                    const container = casesSection.querySelector('.container');
+
+                    if (districtData.cases && districtData.cases.length > 0) {
+                        // Remove existing static cases (except the header)
+                        const existingCases = container.querySelectorAll('.case-study');
+                        existingCases.forEach(el => el.remove());
+
+                        districtData.cases.forEach((caseItem, index) => {
+                            const caseDiv = document.createElement('div');
+                            caseDiv.className = 'case-study';
+                            // Alternate layout
+                            if (index % 2 !== 0) {
+                                caseDiv.style.flexDirection = 'row-reverse';
+                            }
+
+                            caseDiv.innerHTML = `
+                                <div class="case-image">
+                                    <img src="${caseItem.image}" alt="${caseItem.title}">
+                                </div>
+                                <div class="case-text">
+                                    <h3>${caseItem.title}</h3>
+                                    <p>${caseItem.description}</p>
+                                    <a href="#" class="btn btn-outline">了解更多</a>
+                                </div>
+                            `;
+                            container.appendChild(caseDiv);
+                        });
+                    }
+
+                    // Update Observation Section
+                    if (districtData.observation) {
+                        const obsBox = document.getElementById('observation-box');
+                        if (obsBox) {
+                            obsBox.innerHTML = `
+                                <h3>看見地方的可能性</h3>
+                                <p style="margin-top: 20px; color: #555;">${districtData.observation}</p>
+                             `;
+                        }
+                    }
+
+                    document.getElementById('back-btn').href = `county.html?id=${countyId}`;
+                } else {
+                    document.getElementById('place-title').textContent = `${countyName} ${districtName}`;
+                    document.getElementById('back-btn').href = `county.html?id=${countyId}`;
+                }
+
+            } else {
+                document.getElementById('place-title').textContent = '找不到資料';
+                document.getElementById('back-btn').href = 'index.html';
+            }
+        });
+    </script>
+</body>
+
+</html>
