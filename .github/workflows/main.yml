@@ -24,13 +24,16 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: 執行 Python 程式
+    - name: 執行資料抓取
       run: python main.py
 
-    - name: 將結果存回 GitHub (選用)
+    - name: 產生靜態網頁報表
+      run: python generate_report.py
+
+    - name: 將結果存回 GitHub
       run: |
         git config --global user.name "GitHub Action"
         git config --global user.email "action@github.com"
-        git add stock_price.csv
-        git commit -m "Update stock data" || exit 0
+        git add stock_price.csv index.html
+        git commit -m "Update stock data and report" || exit 0
         git push
