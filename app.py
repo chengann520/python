@@ -35,9 +35,59 @@ def fetch_stock_data(ticker_symbol, period="1mo"):
         st.error(f"抓取資料時發生錯誤: {e}")
         return pd.DataFrame()
 
+@st.cache_data(ttl=86400)  # 快取資料 24 小時，清單不需要頻繁更新
+def get_stock_list():
+    """從證交所與櫃買中心獲取股票清單"""
+    try:
+        # 上市股票
+        url_tse = "https://isin.twse.com.tw/isin/C_public.jsp?strMode=2"
+        # 上櫃股票
+        url_otc = "https://isin.twse.com.tw/isin/C_public.jsp?strMode=4"
+        
+        tse_tables = pd.read_html(url_tse, encoding='big5-hkscs')
+        otc_tables = pd.read_html(url_otc, encoding='big5-hkscs')
+        
+        tse_df = tse_tables[0]
+        otc_df = otc_tables[0]
+        
+        # 整理資料：只保留第一欄「有價證券代號及名稱」，並過濾掉標題列
+        def clean_stock_df(df, suffix):
+            df = df.iloc[2:, [0]]
+            df.columns = ['name']
+            # 分離代號與名稱 (例如 "2330　台積電")
+            df['code'] = df['name'].apply(lambda x: x.split('\u3000')[0] if '\u3000' in x else '')
+            df['real_name'] = df['name'].apply(lambda x: x.split('\u3000')[1] if '\u3000' in x else '')
+            # 過濾掉非股票類型的資料 (通常股票代號長度為 4)
+            df = df[df['code'].str.len() == 4]
+            df['display'] = df['code'] + ' ' + df['real_name']
+            df['ticker'] = df['code'] + suffix
+            return df[['display', 'ticker']]
+
+        tse_clean = clean_stock_df(tse_df, ".TW")
+        otc_clean = clean_stock_df(otc_df, ".TWO")
+        
+        full_list = pd.concat([tse_clean, otc_clean], ignore_index=True)
+        return full_list
+    except Exception as e:
+        st.error(f"獲取股票清單時發生錯誤: {e}")
+        return pd.DataFrame({'display': ['2330 台積電'], 'ticker': ['2330.TW']})
+
 # --- 側邊欄 ---
 st.sidebar.header("設定")
-ticker = st.sidebar.text_input("股票代碼", value="2330.TW")
+
+stock_df = get_stock_list()
+stock_options = stock_df['display'].tolist()
+default_index = stock_options.index("2330 台積電") if "2330 台積電" in stock_options else 0
+
+selected_display = st.sidebar.selectbox(
+    "搜尋股票 (代碼或名稱)",
+    options=stock_options,
+    index=default_index
+)
+
+# 取得對應的 Yahoo Finance 代號
+ticker = stock_df[stock_df['display'] == selected_display]['ticker'].values[0]
+
 time_period = st.sidebar.selectbox(
     "選擇時間範圍",
     options=("1d", "5d", "1mo", "6mo", "1y", "max"),
