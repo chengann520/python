@@ -4,6 +4,12 @@ import subprocess
 from stock_analyzer.db import init_db
 from stock_analyzer.update_all import update_all
 
+import os
+import certifi
+
+# 這行代碼會自動抓取當前環境（不論是 Windows 還是 GitHub 的 Linux）的憑證位置
+os.environ['SSL_CERT_FILE'] = certifi.where()
+
 def run_dashboard():
     print("Starting Dashboard...")
     # Assuming dashboard.py is in stock_analyzer/dashboard.py
@@ -35,4 +41,5 @@ def main():
             print("Invalid choice. Please try again.")
 
 if __name__ == "__main__":
+
     main()
