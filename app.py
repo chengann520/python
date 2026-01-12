@@ -44,6 +44,14 @@ time_period = st.sidebar.selectbox(
     index=2
 )
 
+st.sidebar.header("技術指標")
+show_ma = st.sidebar.checkbox("MA (移動平均)", value=True)
+show_macd = st.sidebar.checkbox("MACD", value=False)
+show_vol = st.sidebar.checkbox("VOL (成交量)", value=True)
+show_kd = st.sidebar.checkbox("KD", value=False)
+show_rsi = st.sidebar.checkbox("RSI", value=False)
+show_dmi = st.sidebar.checkbox("DMI", value=False)
+
 # --- 主頁面 ---
 st.title("📈 台股即時數據看板")
 st.subheader(f"目前查看：{ticker}")
@@ -70,33 +78,137 @@ if not df.empty:
     col3.metric("當日最低", f"{latest['Low']:.2f}")
     col4.metric("成交量", f"{int(latest['Volume']):,}")
 
-    # 繪製圖表
+    # --- 計算技術指標 ---
+    if show_ma:
+        df['MA5'] = df['Close'].rolling(window=5).mean()
+        df['MA20'] = df['Close'].rolling(window=20).mean()
+        df['MA60'] = df['Close'].rolling(window=60).mean()
+
+    if show_macd:
+        exp1 = df['Close'].ewm(span=12, adjust=False).mean()
+        exp2 = df['Close'].ewm(span=26, adjust=False).mean()
+        df['MACD'] = exp1 - exp2
+        df['Signal'] = df['MACD'].ewm(span=9, adjust=False).mean()
+        df['Hist'] = df['MACD'] - df['Signal']
+
+    if show_rsi:
+        delta = df['Close'].diff()
+        gain = (delta.where(delta > 0, 0)).rolling(window=14).mean()
+        loss = (-delta.where(delta < 0, 0)).rolling(window=14).mean()
+        rs = gain / loss
+        df['RSI'] = 100 - (100 / (1 + rs))
+
+    if show_kd:
+        low_min = df['Low'].rolling(window=9).min()
+        high_max = df['High'].rolling(window=9).max()
+        df['RSV'] = (df['Close'] - low_min) / (high_max - low_min) * 100
+        df['K'] = df['RSV'].ewm(com=2, adjust=False).mean()
+        df['D'] = df['K'].ewm(com=2, adjust=False).mean()
+
+    if show_dmi:
+        high = df['High']
+        low = df['Low']
+        close = df['Close']
+        window = 14
+        
+        tr1 = high - low
+        tr2 = abs(high - close.shift(1))
+        tr3 = abs(low - close.shift(1))
+        tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
+        atr = tr.rolling(window=window).mean()
+        
+        up_move = high - high.shift(1)
+        down_move = low.shift(1) - low
+        
+        plus_dm = pd.Series([u if u > d and u > 0 else 0 for u, d in zip(up_move, down_move)], index=df.index)
+        minus_dm = pd.Series([d if d > u and d > 0 else 0 for u, d in zip(up_move, down_move)], index=df.index)
+        
+        plus_di = 100 * (plus_dm.rolling(window=window).mean() / atr)
+        minus_di = 100 * (minus_dm.rolling(window=window).mean() / atr)
+        dx = 100 * (abs(plus_di - minus_di) / (plus_di + minus_di))
+        adx = dx.rolling(window=window).mean()
+        
+        df['Plus_DI'] = plus_di
+        df['Minus_DI'] = minus_di
+        df['ADX'] = adx
+
+    # --- 繪製圖表 ---
     st.markdown("### 股價走勢圖")
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(
-        x=df.index, 
-        y=df['Close'], 
-        mode='lines', 
-        name='收盤價',
-        line=dict(color='#1f77b4', width=2)
-    ))
     
-    # 針對日線加入蠟燭圖 (如果資料夠多)
-    if st.checkbox("顯示 K 線圖"):
-        fig = go.Figure(data=[go.Candlestick(
+    # 建立多子圖（如果有成交量或指標需要分開顯示）
+    from plotly.subplots import make_subplots
+    
+    # 計算需要的列數 (Row counts)
+    rows = 1
+    row_heights = [0.7]
+    if show_vol:
+        rows += 1
+        row_heights.append(0.3)
+    if show_macd or show_kd or show_rsi or show_dmi:
+        # 為了簡化，指標放同一個區塊或分開？通常分開比較好。
+        # 這裡先實作將 Close/MA 放在 row 1，Vol 放在 row 2，其他指標放在 row 3
+        rows += 1
+        row_heights.append(0.3)
+        row_heights[0] = 0.5 # 調整比例
+
+    fig = make_subplots(rows=rows, cols=1, shared_xaxes=True, 
+                        vertical_spacing=0.05, row_heights=row_heights)
+
+    # 主圖：K線或收盤價
+    if st.checkbox("顯示 K 線圖", value=True):
+        fig.add_trace(go.Candlestick(
             x=df.index,
             open=df['Open'],
             high=df['High'],
             low=df['Low'],
-            close=df['Close']
-        )])
+            close=df['Close'],
+            name='K線'
+        ), row=1, col=1)
+    else:
+        fig.add_trace(go.Scatter(
+            x=df.index, 
+            y=df['Close'], 
+            mode='lines', 
+            name='收盤價',
+            line=dict(color='#1f77b4', width=2)
+        ), row=1, col=1)
+
+    # 均線
+    if show_ma:
+        fig.add_trace(go.Scatter(x=df.index, y=df['MA5'], name='MA5', line=dict(width=1)), row=1, col=1)
+        fig.add_trace(go.Scatter(x=df.index, y=df['MA20'], name='MA20', line=dict(width=1)), row=1, col=1)
+        fig.add_trace(go.Scatter(x=df.index, y=df['MA60'], name='MA60', line=dict(width=1)), row=1, col=1)
+
+    # 成交量
+    if show_vol:
+        colors = ['red' if df['Close'][i] < df['Open'][i] else 'green' for i in range(len(df))]
+        fig.add_trace(go.Bar(x=df.index, y=df['Volume'], name='成交量', marker_color=colors), row=2, col=1)
+
+    # 其他指標 (放在最後一列)
+    idx_row = rows if rows > 1 else 1
+    if show_macd:
+        fig.add_trace(go.Scatter(x=df.index, y=df['MACD'], name='MACD'), row=idx_row, col=1)
+        fig.add_trace(go.Scatter(x=df.index, y=df['Signal'], name='Signal'), row=idx_row, col=1)
+        fig.add_trace(go.Bar(x=df.index, y=df['Hist'], name='Hist'), row=idx_row, col=1)
     
+    if show_kd:
+        fig.add_trace(go.Scatter(x=df.index, y=df['K'], name='K'), row=idx_row, col=1)
+        fig.add_trace(go.Scatter(x=df.index, y=df['D'], name='D'), row=idx_row, col=1)
+    
+    if show_rsi:
+        fig.add_trace(go.Scatter(x=df.index, y=df['RSI'], name='RSI'), row=idx_row, col=1)
+
+    if show_dmi:
+        fig.add_trace(go.Scatter(x=df.index, y=df['Plus_DI'], name='+DI', line=dict(color='green')), row=idx_row, col=1)
+        fig.add_trace(go.Scatter(x=df.index, y=df['Minus_DI'], name='-DI', line=dict(color='red')), row=idx_row, col=1)
+        fig.add_trace(go.Scatter(x=df.index, y=df['ADX'], name='ADX', line=dict(color='orange')), row=idx_row, col=1)
+
     fig.update_layout(
         template="plotly_dark",
-        xaxis_title="日期",
-        yaxis_title="股價 (TWD)",
+        xaxis_rangeslider_visible=False,
+        height=800 if rows > 1 else 500,
         margin=dict(l=20, r=20, t=20, b=20),
-        height=500
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
     )
     st.plotly_chart(fig, use_container_width=True)
 
