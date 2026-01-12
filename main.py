@@ -1,46 +1,34 @@
-import sys
+import yfinance as yf
+import pandas as pd
 import os
-import subprocess
-from stock_analyzer.db import init_db
-from stock_analyzer.update_all import update_all
+import ssl
 
-import os
-import certifi
+# 解決 SSL 驗證問題 (保留之前的修正，這對於繞過本地認證錯誤很重要)
+ssl._create_default_https_context = ssl._create_unverified_context
+os.environ['CURL_CA_BUNDLE'] = ''
+os.environ['REQUESTS_CA_BUNDLE'] = ''
 
-# 這行代碼會自動抓取當前環境（不論是 Windows 還是 GitHub 的 Linux）的憑證位置
-os.environ['SSL_CERT_FILE'] = certifi.where()
-
-def run_dashboard():
-    print("Starting Dashboard...")
-    # Assuming dashboard.py is in stock_analyzer/dashboard.py
-    dashboard_path = os.path.join("stock_analyzer", "dashboard.py")
-    subprocess.run([sys.executable, "-m", "streamlit", "run", dashboard_path])
-
-def main():
-    while True:
-        print("\n=== Stock Analyzer CLI ===")
-        print("1. Run Dashboard")
-        print("2. Update Data (Fetch & Save)")
-        print("3. Initialize Database")
-        print("4. Exit")
-        
-        choice = input("Select an option: ")
-        
-        if choice == "1":
-            run_dashboard()
-        elif choice == "2":
-            update_all()
-        elif choice == "3":
-            print("Initializing database...")
-            init_db()
-            print("Database initialized.")
-        elif choice == "4":
-            print("Exiting...")
-            break
-        else:
-            print("Invalid choice. Please try again.")
+def get_stock():
+    # 情況 B：yfinance 抓不到資料 (Empty Data)
+    # 解決方法：加入更強健的抓取邏輯
+    
+    print("正在抓取 2330.TW 的資料...")
+    # 使用 download 並加入 timeout 防止卡死
+    data = yf.download("2330.TW", period="1d", timeout=30)
+    
+    if data.empty:
+        print("yf.download 抓取失敗 (Empty Data)，嘗試使用 yf.Ticker 備用方案...")
+        # 如果失敗，嘗試另外一種寫法
+        ticker = yf.Ticker("2330.TW")
+        data = ticker.history(period="1d")
+    
+    if not data.empty:
+        print("成功獲取數據：")
+        print(data)
+        data.to_csv("stock_price.csv")
+        print("資料已儲存至 stock_price.csv")
+    else:
+        raise Exception("無法從 Yahoo Finance 獲取資料。這可能是因為 IP 被封鎖或網路問題。")
 
 if __name__ == "__main__":
-
-    main()
-
+    get_stock()
