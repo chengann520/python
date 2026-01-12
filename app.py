@@ -40,7 +40,7 @@ st.sidebar.header("設定")
 ticker = st.sidebar.text_input("股票代碼", value="2330.TW")
 time_period = st.sidebar.selectbox(
     "選擇時間範圍",
-    Options=("1d", "5d", "1mo", "6mo", "1y", "max"),
+    options=("1d", "5d", "1mo", "6mo", "1y", "max"),
     index=2
 )
 
